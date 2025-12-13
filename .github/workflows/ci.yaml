@@ -25,3 +25,12 @@ jobs:
 
       - name: test pipeline, print AWS region
         run: 'echo AWS region is $AWS_REGION'
+
+      - name: login to ECR
+        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin 313196412030.dkr.ecr.eu-west-2.amazonaws.com
+
+      - name: build docker image
+        run: |
+          docker build -t ecs-repo .
+          docker tag ecs-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest
+          docker push 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest

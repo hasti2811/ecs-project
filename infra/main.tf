@@ -9,11 +9,36 @@ module "vpc" {
   az_2                  = var.az_2
 }
 
+module "ecr" {
+  source = "./modules/ecr"
+}
+
+module "alb" {
+  source = "./modules/alb"
+  subnets = [
+    module.vpc.public_subnet_1_id,
+    module.vpc.public_subnet_2_id
+  ]
+  alb_sg_id = module.sg.alb_sg_id
+  vpc_id    = module.vpc.vpc_id
+  cert_arn  = module.acm.cert_arn
+}
+
 module "sg" {
   source = "./modules/sg"
   vpc_id = module.vpc.vpc_id
 }
 
-module "ecr" {
-  source = "./modules/ecr"
+module "acm" {
+  source         = "./modules/acm"
+  subdomain_name = var.subdomain_name
+  zone_name      = var.zone_name
+}
+
+module "route53" {
+  source         = "./modules/route53"
+  alb_dns_name   = module.alb.alb_dns_name
+  subdomain_name = var.subdomain_name
+  zone_name      = var.zone_name
+  alb_zone_id    = module.alb.alb_zone_id
 }

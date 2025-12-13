@@ -32,3 +32,13 @@ variable "az_2" {
   type = string
   default = "eu-west-2b"
 }
+
+variable "zone_name" {
+  type = string
+  default = "hastiamin.co.uk"
+}
+
+variable "subdomain_name" {
+  type = string
+  default = "ecs-app.hastiamin.co.uk"
+}

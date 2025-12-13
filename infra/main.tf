@@ -13,6 +13,17 @@ module "ecr" {
   source = "./modules/ecr"
 }
 
+module "ecs" {
+  source = "./modules/ecs"
+  subnets = [
+    module.vpc.private_subnet_1_id,
+    module.vpc.private_subnet_2_id
+  ]
+  alb_tg_arn = module.alb.alb_tg_arn
+  ecs_sg_id  = module.sg.ecs_sg_id
+  img_uri    = module.ecr.image_uri_main
+}
+
 module "alb" {
   source = "./modules/alb"
   subnets = [

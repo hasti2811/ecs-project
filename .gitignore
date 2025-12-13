@@ -46,6 +46,9 @@ jspm_packages/
 *.tfstate
 *.tfstate.*
 
+**/.terraform.lock.hcl
+**/.terraform/
+
 # Crash log files
 crash.log
 crash.*.log

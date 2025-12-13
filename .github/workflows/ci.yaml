@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  security-events: write
+
 env:
   AWS_REGION: 'eu-west-2'
 
@@ -45,7 +48,7 @@ jobs:
         #   ignore-unfixed: true
 
       - name: Upload Trivy SARIF report to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: trivy-report.sarif
 

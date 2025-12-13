@@ -8,3 +8,8 @@ module "vpc" {
   az_1                  = var.az_1
   az_2                  = var.az_2
 }
+
+module "sg" {
+  source = "./modules/sg"
+  vpc_id = module.vpc.vpc_id
+}

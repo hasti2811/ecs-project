@@ -2,6 +2,12 @@ name: CD
 
 on:
   workflow_dispatch:
+    inputs:
+      confirmAction:
+        description: 'type "yes" to apply all infra'
+        required: true
+        type: string
+        default: no
 
 env:
   AWS_REGION: 'eu-west-2'
@@ -34,6 +40,13 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
+
+      - name: safety check
+        run: |
+          if [ "${{ github.event.inputs.confirmAction }}" != "yes" ]; then
+            echo "apply cancelled"
+            exit 1
+          fi
 
       - name: Terraform Apply
         run: terraform apply --auto-approve

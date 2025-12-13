@@ -2,6 +2,12 @@ name: destroy infra
 
 on:
   workflow_dispatch:
+    inputs:
+      confirmAction:
+        description: 'type "yes" to destroy all infra'
+        required: true
+        type: string
+        default: no
 
 env:
   AWS_REGION: 'eu-west-2'
@@ -31,6 +37,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+
+      - name: safety check
+        run: |
+          if [ "${{ github.event.inputs.confirmAction }}" != "yes" ]; then
+              echo "destruction cancelled"
+              exit 1
+          fi
 
       - name: Terraform Destroy
         run: terraform destroy --auto-approve

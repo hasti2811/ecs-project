@@ -23,14 +23,21 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: test pipeline, print AWS region
-        run: 'echo AWS region is $AWS_REGION'
-
       - name: login to ECR
         run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin 313196412030.dkr.ecr.eu-west-2.amazonaws.com
 
       - name: build docker image
         run: |
-          docker build -t ecs-repo .
-          docker tag ecs-repo:latest 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest
+          docker build -t 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest .
+
+      - name: Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@7b7aa264d83dc58691451798b4d117d53d21edfe
+        with:
+          image-ref: 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest
+          severity: HIGH,CRITICAL
+          exit-code: 1
+          ignore-unfixed: true
+
+      - name: push to ECR
+        run: |
           docker push 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest

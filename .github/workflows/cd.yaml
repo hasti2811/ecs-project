@@ -17,7 +17,7 @@ defaults:
     working-directory: infra
 
 jobs:
-  terraform-apply:
+  terraform-choice:
     runs-on: ubuntu-latest
     steps:
       - name: safety check

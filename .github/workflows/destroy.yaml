@@ -7,7 +7,7 @@ on:
         description: 'type "yes" to destroy all infra'
         required: true
         type: string
-        default: no
+        default: ''
 
 env:
   AWS_REGION: 'eu-west-2'
@@ -20,6 +20,13 @@ jobs:
   terraform-destroy:
     runs-on: ubuntu-latest
     steps:
+      - name: safety check
+        run: |
+          if [ "${{ github.event.inputs.confirmAction }}" != "yes" ]; then
+              echo "destruction cancelled"
+              exit 1
+          fi
+
       - name: checkout code
         uses: actions/checkout@v3
 
@@ -37,13 +44,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-
-      - name: safety check
-        run: |
-          if [ "${{ github.event.inputs.confirmAction }}" != "yes" ]; then
-              echo "destruction cancelled"
-              exit 1
-          fi
 
       - name: Terraform Destroy
         run: terraform destroy --auto-approve

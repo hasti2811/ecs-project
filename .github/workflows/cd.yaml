@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       confirmAction:
-        description: 'type "yes" to apply all infra'
+        description: 'type "apply" to apply all infra, type plan to view infra plan'
         required: true
         type: string
-        default: no
+        default: ''
 
 env:
   AWS_REGION: 'eu-west-2'
@@ -20,6 +20,13 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     steps:
+      - name: safety check
+        run: |
+          if [ "${{ github.event.inputs.confirmAction }}" != "plan" ] && [ "${{ github.event.inputs.confirmAction }}" != "apply" ]; then
+          echo "apply cancelled"
+          exit 1
+          fi
+
       - name: checkout code
         uses: actions/checkout@v3
 
@@ -39,14 +46,9 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
+        if: ${{ github.event.inputs.confirmAction == 'plan' }}
         run: terraform plan
 
-      - name: safety check
-        run: |
-          if [ "${{ github.event.inputs.confirmAction }}" != "yes" ]; then
-            echo "apply cancelled"
-            exit 1
-          fi
-
       - name: Terraform Apply
+        if: ${{ github.event.inputs.confirmAction == 'apply' }}
         run: terraform apply --auto-approve

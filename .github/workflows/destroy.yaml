@@ -26,6 +26,7 @@ jobs:
               echo "destruction cancelled"
               exit 1
           fi
+        working-directory: .
 
       - name: checkout code
         uses: actions/checkout@v3

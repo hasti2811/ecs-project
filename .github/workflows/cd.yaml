@@ -60,7 +60,7 @@ jobs:
 
       - name: Run Checkov (plan)
         if: ${{ github.event.inputs.confirmAction == 'plan' }}
-        uses: bridgecrewio/checkov-action@v12
+        uses: bridgecrewio/checkov-action@v13
         with:
           directory: infra
           framework: terraform
@@ -79,7 +79,7 @@ jobs:
 
       - name: Run Checkov (apply)
         if: ${{ github.event.inputs.confirmAction == 'apply' }}
-        uses: bridgecrewio/checkov-action@v12
+        uses: bridgecrewio/checkov-action@v13
         with:
           directory: infra
           framework: terraform

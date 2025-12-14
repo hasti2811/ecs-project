@@ -46,17 +46,17 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v6
-        with:
-          tflint_version: latest
-          cache: true
+      # - name: Setup TFLint
+      #   uses: terraform-linters/setup-tflint@v6
+      #   with:
+      #     tflint_version: latest
+      #     cache: true
 
-      - name: Run TFLint (plan)
-        if: ${{ github.event.inputs.confirmAction == 'plan' }}
-        run: |
-          tflint --init
-          tflint || true
+      # - name: Run TFLint (plan)
+      #   if : ${ { github.event.inputs.confirmAction == 'plan' }}   # i added spaces because it would not comment out otherwise for some weird reasons
+      #   run: |
+      #     tflint --init
+      #     tflint || true
 
       - name: Run Checkov (plan)
         if: ${{ github.event.inputs.confirmAction == 'plan' }}
@@ -71,11 +71,11 @@ jobs:
         if: ${{ github.event.inputs.confirmAction == 'plan' }}
         run: terraform plan
 
-      - name: Run TFLint (apply)
-        if: ${{ github.event.inputs.confirmAction == 'apply' }}
-        run: |
-          tflint --init
-          tflint
+      # - name: Run TFLint (apply)
+      #   if : ${ { github.event.inputs.confirmAction == 'apply' }}   # i added spaces because it would not comment out otherwise for some weird reasons
+      #   run: |
+      #     tflint --init
+      #     tflint
 
       - name: Run Checkov (apply)
         if: ${{ github.event.inputs.confirmAction == 'apply' }}

@@ -22,6 +22,19 @@ Then i created the ECS module so that I can run my image as a container on the A
 
 Finally I automated code changes through CI/CD so that when a developer makes changes, they can build the docker image and push it to ECR from GitHub actions. This means that the terraform infrastructure can pull updated images. They can also apply the infrastructure and destroy it too because I have made pipelines for those functions too.
 
+## Local App Setup
+
+```bash
+yarn install
+yarn build
+yarn global add serve
+serve -s build
+
+#yarn start
+http://localhost:3000/workspaces/default/dashboard
+
+```
+
 ## Architecture Diagram
 
 <img src="./readme-images/terraform arch.drawio.png">
@@ -153,16 +166,3 @@ This tears down the infrastructure
 ## This is the deployed app
 
 <img src="./readme-images/app-img.png">
-
-## Local App Setup
-
-```bash
-yarn install
-yarn build
-yarn global add serve
-serve -s build
-
-#yarn start
-http://localhost:3000/workspaces/default/dashboard
-
-```

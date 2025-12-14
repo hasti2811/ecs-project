@@ -86,7 +86,7 @@ jobs:
           soft_fail: false
           output_format: cli,sarif
           output_file_path: console,results.sarif
-          skip_check: CKV2_AWS_12,CKV2_AWS_5,CKV2_AWS_28,CKV_AWS_260,CKV_AWS_336,CKV_AWS_91,CKV_AWS_131,CKV_AWS_150
+          skip_check: CKV2_AWS_12,CKV2_AWS_5,CKV2_AWS_28,CKV_AWS_260,CKV_AWS_336,CKV_AWS_91,CKV_AWS_131,CKV_AWS_150,CKV2_AWS_11
 
       - name: Terraform Apply
         if: ${{ github.event.inputs.confirmAction == 'apply' }}

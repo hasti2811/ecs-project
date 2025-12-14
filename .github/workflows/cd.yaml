@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirmAction:
-        description: 'type "apply" to apply all infra, type plan to view infra plan'
+        description: 'type "apply" to apply all infra, type "plan" to view infra plan'
         required: true
         type: string
         default: ''
@@ -23,9 +23,10 @@ jobs:
       - name: safety check
         run: |
           if [ "${{ github.event.inputs.confirmAction }}" != "plan" ] && [ "${{ github.event.inputs.confirmAction }}" != "apply" ]; then
-          echo "apply cancelled"
+          echo "apply/plan cancelled"
           exit 1
           fi
+        working-directory: .
 
       - name: checkout code
         uses: actions/checkout@v3

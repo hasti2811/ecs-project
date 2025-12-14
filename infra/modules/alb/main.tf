@@ -44,7 +44,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.my-alb.arn
   port              = "443"
   protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  ssl_policy        = "ELBSecurityPolicy-FS-1-2-Res-2020-10" # USING MODERN CIPHER POLICY
   certificate_arn   = var.cert_arn
 
   default_action {

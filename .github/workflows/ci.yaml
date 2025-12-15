@@ -35,7 +35,7 @@ jobs:
         with:
           image-ref: 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest
           format: sarif
-          output: trivy-report.sarif
+          # output: trivy-report.sarif
 
         # ADD THE FOLLOWING LINES FOR GOOD SECURITY, WITH THE FOLLOWING LINES IN PLACE, IT WILL NOT BUILD THE IMAGE IF THERE ARE CRITICAL VULNERABILITIES. SINCE I DID NOT BUILD THIS APP AND THERE ARE NO
         # CURRENT DEVELOPERS MAKING UPDATES, I CANNOT UPDATE THE CODE TO REMOVE VULNERABILITIES SO THE BUILD WILL FAIL. HOWEVER FOR EDUCATIONAL PURPOSES I WILL COMMENT THOSE LINES OUT SO THE BUILD CAN WORk
@@ -44,10 +44,10 @@ jobs:
         #   exit-code: 1
         #   ignore-unfixed: true
 
-      - name: Upload Trivy SARIF report to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-report.sarif
+      # - name: Upload Trivy SARIF report to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v4
+      #   with:
+      #     sarif_file: trivy-report.sarif
 
       - name: push to ECR
         run: |

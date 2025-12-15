@@ -13,7 +13,10 @@ RUN yarn build
 FROM node:alpine
 
 WORKDIR /app
-COPY --from=build /app /app
+
+# OLD: COPY --from=build /app /app
+
+COPY --from=build /app/build ./build
 
 RUN yarn global add serve
 

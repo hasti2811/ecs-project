@@ -121,7 +121,7 @@ Here I have configred a task definition which is trigged through my ECS service,
 
 ## CI pipeline, this builds the docker image with updated changes and pushes it to ECR
 
-<img src="./readme-images/CI-new-pipeline.png.png">
+<img src="./readme-images/CI-new-pipeline.png">
 
 My CI pipeline is a manual trigger. Firstly it checks out the code and configures AWS credentials. I have used secrets to store my AWS access keys because that is sensitive data. Then it logs into ECR and builds a new docker image and pushes it to ECR. So whenever developers make changes to the code and push to GitHub, they can manually run the pipeline to build an updated docker image. Then the CD pipeline can be run to deploy the updated docker image
 

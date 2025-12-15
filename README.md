@@ -95,7 +95,7 @@ As we can see I have configured it so that there is one public route table which
 
 ## The ECR repo
 
-<img src="./readme-images/ecr-repo.png">
+<img src="./readme-images/ecr-repo-new.png">
 
 I did this part manually and locally and i reference the ECR repo in my terraform ECR module with a data block. I also ensure that developers changes are automated and a new docker image is built and pushed to ECR through my CI pipeline
 

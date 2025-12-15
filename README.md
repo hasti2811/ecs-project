@@ -31,7 +31,7 @@ http://localhost:3000/workspaces/default/dashboard
 
 ## Architecture Diagram
 
-<img src="./readme-images/terraform arch.drawio.png">
+<img src="./readme-images/new-ecs-arch.drawio.png">
 
 ## File structure:
 
@@ -135,7 +135,7 @@ The pipeline checks out the code, configures AWS credentials using secrets to pr
 
 If `plan` is selected, the pipeline initialises Terraform, runs Checkov with `soft_fail`: true so security issues are reported without failing the pipeline, and then runs `terraform plan` to preview infrastructure changes.
 
-If `apply` is selected, the same steps run, but Checkov is configured with `soft_fail`: false. In this case, any detected issues cause the pipeline to fail and prevent `terraform apply` from executing.
+If `apply` is selected, the same steps run, but Checkov is configured with `soft_fail`: false. In this case, any detected issues cause the pipeline to fail and prevent `terraform apply --auto-approve` from executing.
 
 In the .yaml file I specified some `skip_steps` for specific reasons that can be viewed in the file itself.
 

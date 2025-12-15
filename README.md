@@ -4,23 +4,17 @@
 
 ## Project Overview
 
-I have containerised an open source application using docker to ensure that the app runs the same on every environment. I used multistage builds in order to keep the docker image to a small size, I have also ensured that the Docker image runs as a rootless user for security purposes.
+I containerised an open-source application using Docker to ensure consistent behaviour across all environments. I used multi stage builds to reduce image size and ran the container as a non-root user for security.
 
-I created an ECR repo to store my image, and I made the infrastructure using ClickOps (deploying via the AWS console). This was just the first part, I tore it all down and began the infrastructure using Terraform as my Infrastructure as Code tool.
+I initially deployed the infrastructure using AWS ClickOps, then tore everything down and rebuilt it using Terraform as Infrastructure as Code. I configured the AWS provider and structured the setup using reusable modules.
 
-I then started the infrastructure for the project. I started with the provider block to ensure that I am deploying on AWS. I made modules for each resource I needed. Firstly I started with VPC so I made my public and private subnets, route tables, NAT gateways, internet gateways, and configured 2 availability zones within the region.
+I built a VPC across two availability zones with public and private subnets, route tables, an internet gateway, and NAT gateways. I created security groups so the ALB accepts HTTP, HTTPS, and container port traffic from the internet, while ECS tasks only accept traffic from the load balancer, preventing direct internet access.
 
-I created security groups for a load balancer which accepts HTTP, HTTPS, and my container port traffic from the internet. I then made a security group for the ECS tasks that accept the same traffic but only from the load balancer. This ensures that the ECS tasks do not get requests from the internet, the requests must come from the load balancer.
+I set up an Application Load Balancer with listeners, target groups across private subnets, and enforced HTTP to HTTPS redirection. I used Route 53 and ACM to point my domain to the ALB and enable SSL/TLS.
 
-Then i set up the Application Load balancer, the ALB listeners, and a target group so that I can distribute traffic to both private subnets. I also made sure that HTTP requests are redirected to HTTPS.
+I referenced an existing ECR repository through a Terraform module to output the image URI, then deployed the application using ECS to run the container.
 
-I also made an ECR module to reference my existing ECR repo, this is so I can output my image URI.
-
-I created a Route 53 and ACM module to point my domain to the ALB DNS name and to also give it a SSL/TLS certificate to enable HTTPS.
-
-Then i created the ECS module so that I can run my image as a container on the AWS cloud.
-
-Finally I automated code changes through CI/CD so that when a developer makes changes, they can build the docker image and push it to ECR from GitHub actions. This means that the terraform infrastructure can pull updated images. They can also apply the infrastructure and destroy it too because I have made pipelines for those functions too.
+Finally, I implemented CI/CD with GitHub Actions so code changes automatically build and push Docker images to ECR, and pipelines can apply or destroy the Terraform infrastructure as needed.
 
 ## Local App Setup
 
@@ -135,15 +129,15 @@ My CI pipeline is a manual trigger. Firstly it checks out the code and configure
 
 <img src="./readme-images/CD-pipeline.png">
 
-My CD pipeline is a manual trigger. It has a safety check to ensure that the developer types 'yes' to run the pipeline. Firstly it checks out the code and configures AWS credentials. I have used secrets to store my AWS access keys because that is sensitive data. After that it sets up terraform and runs 3 terraform commands:
+My CD pipeline is manually triggered and includes a safety check that requires the user to explicitly enter `plan` or `apply`. If any other input is provided, the pipeline fails early.
 
-```
-terraform init
-terraform plan
-terraform apply --auto-approve
-```
+The pipeline checks out the code, configures AWS credentials using secrets to protect sensitive access keys, and sets up Terraform.
 
-This allows us to initialise the terraform, we also get to see the plan in the pipeline and it then builds the infrastructure
+If `plan` is selected, the pipeline initialises Terraform, runs Checkov with `soft_fail`: true so security issues are reported without failing the pipeline, and then runs `terraform plan` to preview infrastructure changes.
+
+If `apply` is selected, the same steps run, but Checkov is configured with `soft_fail`: false. In this case, any detected issues cause the pipeline to fail and prevent `terraform apply` from executing.
+
+In the .yaml file I specified some `skip_steps` for specific reasons that can be viewed in the file itself.
 
 ## Destroy infra pipeline, this runs terraform destroy and removes the infrastructure. I have also included a confirmation check
 

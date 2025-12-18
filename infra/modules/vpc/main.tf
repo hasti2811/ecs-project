@@ -13,12 +13,14 @@ resource "aws_subnet" "public-subnet-1" {
   vpc_id     = aws_vpc.my-vpc.id
   availability_zone = var.az_1
   cidr_block = var.public_subnet_1_cidr
+  map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "public-subnet-2" {
   vpc_id     = aws_vpc.my-vpc.id
   availability_zone = var.az_2
   cidr_block = var.public_subnet_2_cidr
+  map_public_ip_on_launch = true
 }
 
 # private subnets
@@ -89,7 +91,7 @@ resource "aws_route_table" "private-subnet-rtb-1" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.NAT-1.id
+    nat_gateway_id = aws_nat_gateway.NAT-1.id
   }
 }
 
@@ -98,7 +100,7 @@ resource "aws_route_table" "private-subnet-rtb-2" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.NAT-2.id
+    nat_gateway_id = aws_nat_gateway.NAT-2.id
   }
 }
 

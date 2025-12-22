@@ -8,7 +8,7 @@ I containerised an open-source application using Docker to ensure consistent beh
 
 I initially deployed the infrastructure using AWS ClickOps, then tore everything down and rebuilt it using Terraform as Infrastructure as Code. I configured the AWS provider and structured the setup using reusable modules.
 
-I built a VPC across two availability zones with public and private subnets, route tables, an internet gateway, and NAT gateways. I created security groups so the ALB accepts HTTP, HTTPS, and container port traffic from the internet, while ECS tasks only accept traffic from the load balancer, preventing direct internet access.
+I built a VPC across two availability zones with public and private subnets, route tables, an internet gateway, and NAT gateways. I created security groups so the ALB accepts HTTP, HTTPS, and container port traffic from the internet, while ECS tasks only accept traffic from the load balancer on port 3000, preventing direct internet access.
 
 I set up an Application Load Balancer with listeners, target groups across private subnets, and enforced HTTP to HTTPS redirection. I used Route 53 and ACM to point my domain to the ALB and enable SSL/TLS.
 
@@ -81,7 +81,7 @@ The security group for the load balancer allows incomming HTTP, HTTPS, and the d
 
 <img src="./readme-images/sg-alb.png">
 
-The security group for the ECS tasks allows incoming HTTP, HTTPS, and the docker image container port traffic from the security group of the ALB
+The security group for the ECS tasks allows incoming docker image container port traffic from the security group of the ALB
 
 <img src="./readme-images/sg-ecs.png">
 

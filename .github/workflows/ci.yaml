@@ -44,11 +44,6 @@ jobs:
         #   exit-code: 1
         #   ignore-unfixed: true
 
-      # - name: Upload Trivy SARIF report to GitHub Security tab
-      #   uses: github/codeql-action/upload-sarif@v4
-      #   with:
-      #     sarif_file: trivy-report.sarif
-
       - name: push to ECR
         run: |
           docker push 313196412030.dkr.ecr.eu-west-2.amazonaws.com/ecs-repo:latest

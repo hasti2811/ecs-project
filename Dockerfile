@@ -14,8 +14,6 @@ FROM node:alpine
 
 WORKDIR /app
 
-# OLD: COPY --from=build /app /app
-
 COPY --from=build /app/build ./build
 
 RUN yarn global add serve
